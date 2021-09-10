@@ -21,6 +21,11 @@ app.get("/", (req, res) => {
 });
 
 
+app.get("/compose", (req, res) => {
+  res.render("compose");
+});
+
+
 app.get("/about", (req, res) => {
   res.render("about", { content: aboutContent });
 });
