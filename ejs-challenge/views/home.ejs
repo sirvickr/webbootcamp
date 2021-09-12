@@ -4,7 +4,15 @@
 <p><%= startingContent %> </p>
 <% posts.forEach((post) => { %>
     <h1><%=post.title%></h1>
-    <p><%=post.content%></p>
+    <%const maxLen = 100;%> 
+    <%let body = post.content.substring(0, maxLen);%> 
+    <%if(post.content.length > maxLen) {%> 
+        <%body += " ..."%> 
+    <%}%> 
+    <p>
+        <%=body%>
+        <a href="/posts/<%=post.title%>">Read More</a>
+    </p>
 <% }); %>
     
 <%- include("partials/footer") -%> 
