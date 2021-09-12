@@ -11,7 +11,24 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
-const posts = [];
+const posts = [
+  {
+    title: "Post1",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In nibh mauris cursus mattis molestie a iaculis at. In egestas erat imperdiet sed euismod. Rhoncus mattis rhoncus urna neque viverra justo. Arcu vitae elementum curabitur vitae nunc. Dolor sit amet consectetur adipiscing elit duis. Vitae nunc sed velit dignissim sodales ut eu sem integer. Et malesuada fames ac turpis egestas sed tempus urna et. Vitae et leo duis ut diam quam. Morbi quis commodo odio aenean sed adipiscing diam. Placerat vestibulum lectus mauris ultrices eros in cursus. Tempor nec feugiat nisl pretium fusce."
+  },
+  {
+    title: "Another post",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue interdum velit euismod in. A pellentesque sit amet porttitor. Quisque sagittis purus sit amet volutpat consequat. Aliquam sem et tortor consequat. Eget aliquet nibh praesent tristique magna sit amet purus. Ligula ullamcorper malesuada proin libero nunc consequat interdum. Consequat ac felis donec et. Justo nec ultrices dui sapien eget. Et ligula ullamcorper malesuada proin. Sed ullamcorper morbi tincidunt ornare massa. Ut lectus arcu bibendum at varius vel pharetra vel turpis. Quam elementum pulvinar etiam non. Sociis natoque penatibus et magnis dis parturient montes nascetur."
+  },
+  {
+    title: "One more post",
+    content: "message3"
+  },
+  {
+    title: "Final post",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis risus sed vulputate odio ut. Ornare arcu dui vivamus arcu felis bibendum ut tristique. Accumsan tortor posuere ac ut. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tempor commodo ullamcorper a lacus vestibulum. Placerat vestibulum lectus mauris ultrices eros in cursus turpis massa. Dignissim convallis aenean et tortor at risus viverra adipiscing. Etiam sit amet nisl purus in mollis nunc. Viverra mauris in aliquam sem fringilla. Porttitor leo a diam sollicitudin tempor id eu nisl nunc."
+  }
+];
 
 app.set('view engine', 'ejs');
 
