@@ -17,5 +17,55 @@ client.connect(function(err) {
 
     const db = client.db(dbName);
 
-    client.close();
+    findDocuments(db, function(fruits) { 
+        console.log(`Found ${fruits.length} records`);
+        if(fruits.length > 0) {
+            console.log(fruits);
+            client.close(); 
+        } else {
+            insertDocuments(db, function() { 
+                client.close(); 
+            });
+        }
+    });
 });
+
+const findDocuments = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection("fruits");
+    // Find documents
+    collection.find({}).toArray(function(err, fruits) {
+        assert.equal(null, err);
+        callback(fruits);
+    });
+}
+
+const insertDocuments = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection("fruits");
+    // Insert some documents
+    collection.insertMany(
+        [
+            {
+                name: "Apple",
+                score: 8,
+                review: "Greate fruit"
+            },
+            {
+                name: "Orange",
+                score: 6,
+                review: "Kinda sour"
+            },
+            {
+                name: "Banana",
+                score: 9,
+                review: "Great stuff!"
+            }
+        ],
+        function(err, result) {
+            assert.equal(err, null);
+            console.log("Inserted 3 documents into the collection");
+            callback(result);
+        }
+    );
+};
