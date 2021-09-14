@@ -5,10 +5,10 @@ const assert = require("assert");
 const url = "mongodb://localhost:27017";
 
 // Database name
-const dbName = "fruits";
+const dbName = "fruitsDB";
 
 // Create a new MongoClient
-const client = new MongoClient(url);
+const client = new MongoClient(url, { useNewUrlParser: true });
 
 // Use connect method to connect to the Server
 client.connect(function(err) {
