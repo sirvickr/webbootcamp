@@ -32,58 +32,103 @@ const itemSchema = new mongoose.Schema({
 // Create a collection "items"
 const Item = mongoose.model("Item", itemSchema);
 
+// Create schema of 'List'
+const listSchema = new mongoose.Schema({
+  name: String,
+  items: [itemSchema]
+});
+
+// Create a collection "lists"
+const List = mongoose.model("List", listSchema);
+
 app.get("/", function(req, res) {
-
-const day = date.getDate();
-
+  const day = date.getDate();
   Item.find({}, function(err, items) {
-    res.render("list", {listTitle: day, newListItems: items});
+    res.render("list", {today: day, listTitle: "Main", newListItems: items});
   });
-
 });
 
-app.post("/", function(req, res){
-
-  const item = req.body.newItem;
-
-  if (req.body.list === "Work") {
-    workItems.push(item);
-    res.redirect("/work");
-  } else {
-    new Item({ name: item, done: false }).save();
+app.post("/", function(req, res) {
+  const listName = req.body.list;
+  const itemName = req.body.newItem;
+  const item = new Item({ name: itemName, done: false });
+  if (listName === "Main") {
+    item.save();
     res.redirect("/");
+  } else {
+    List.findOne({name: listName}, function(err, list) {
+      list.items.push(item);
+      list.save();
+      res.redirect("/" + listName);
+    });
   }
-
 });
 
-app.post("/toggle", function(req, res){
+app.post("/toggle", function(req, res) {
+  const listName = req.body.list;
+  const itemId = req.body.itemId;
   let checked = req.body.done ? true : false;
-  Item.updateOne({_id: req.body.itemId}, {done: checked}, function(err, result) {
-    if(err) {
-      console.log(err);
+  if (listName === "Main") {
+    Item.updateOne({_id: itemId}, {done: checked}, function(err, result) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("updated:", result);
+      }
+      res.redirect("/");
+    });
+  } else {
+    // List.findOneAndUpdate({'items._id': itemId}, {'$set': {'items.$.done': checked}}, function(err, result) {
+    List.findOneAndUpdate({name: listName, items: {$elemMatch: {_id: itemId}}}, {$set: {"items.$.done" : checked}}, function(err, result) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("updated:", result);
+      }
+      res.redirect("/" + listName);
+    });
+  }
+});
+
+app.post("/delete", function(req, res) {
+  const listName = req.body.list;
+  if (listName === "Main") {
+    Item.deleteMany({done: true}, function(err, result) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("deleted:", result);
+      }
+      res.redirect("/");
+    });
+  } else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {done: true}}}, function(err, result) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("updated:", result);
+      }
+      res.redirect("/" + listName);
+    });
+  }
+});
+
+app.get("/:list", function(req, res) {
+  const listName = req.params.list;
+  const day = date.getDate();
+  console.log(listName);
+  List.findOne({name: listName}, function(err, list) {
+    if(list) {
+      res.render("list", {today: day, listTitle: listName, newListItems: list.items});
     } else {
-      console.log("updated:", result);
+      list = new List({ name: listName, items: [] });
+      list.save();
+      res.redirect("/" + listName);
     }
   });
-  res.redirect("/");
 });
 
-app.post("/delete", function(req, res){
-  Item.deleteMany({done: true}, function(err, result) {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log("deleted:", result);
-    }
-  });
-  res.redirect("/");
-});
-
-app.get("/work", function(req, res){
-  res.render("list", {listTitle: "Work List", newListItems: workItems});
-});
-
-app.get("/about", function(req, res){
+app.get("/about", function(req, res) {
   res.render("about");
 });
 

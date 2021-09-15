@@ -1,7 +1,8 @@
 <%- include("header") -%>
 
   <div class="box" id="heading">
-    <h1> <%= listTitle %> </h1>
+    <h1> <%=listTitle%> </h1>
+    <h1> <%=today%> </h1>
   </div>
 
   <div class="box">
@@ -16,16 +17,17 @@
           >
           <p><%=  item.name  %></p>
         </div>
-        </form>
+        <input type="hidden" name="list" value="<%=listTitle%>">
+      </form>
     <% }); %>
 
     <form class="item" action="/" method="post">
       <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
-      <button type="submit" name="list">+</button>
+      <button type="submit" name="list" value="<%=listTitle%>">+</button>
     </form>
 
     <form class="item" action="/delete" method="post">
-      <button id="del" type="submit">-</button>
+      <button id="del" type="submit" name="list" value="<%=listTitle%>">-</button>
       <label for="del">Delete accomplished items</label>
     </form>
   </div>
