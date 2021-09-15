@@ -62,13 +62,23 @@ Fruit.insertMany([kiwi, orange, banana], function(err, result) {
         console.log("Successfully saved all the fruits to the database:");
         console.log(result);
 
-        Fruit.find(function(err, result) {
+        Fruit.updateOne({ name: "Orange" }, { rating: 7 }, function(err, result) {
             if(err) {
                 console.log(err);
             } else {
+                console.log("Successfully updated the document:");
                 console.log(result);
             }
-            mongoose.connection.close();
+
+            Fruit.find(function(err, result) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log(result);
+                }
+                mongoose.connection.close();
+            });
+    
         });
     }
 });
