@@ -68,6 +68,17 @@ app.post("/toggle", function(req, res){
   res.redirect("/");
 });
 
+app.post("/delete", function(req, res){
+  Item.deleteMany({done: true}, function(err, result) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("deleted:", result);
+    }
+  });
+  res.redirect("/");
+});
+
 app.get("/work", function(req, res){
   res.render("list", {listTitle: "Work List", newListItems: workItems});
 });
