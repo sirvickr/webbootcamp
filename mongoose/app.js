@@ -9,7 +9,7 @@ const dbName = "fruitsDB";
 // Connect to the database (it is created if necessary)
 mongoose.connect(url + dbName, { useNewUrlParser: true });
 
-// Create schema of a collection element
+// Create schema of a collection element 'Fruit'
 const fruitSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -27,14 +27,14 @@ const fruitSchema = new mongoose.Schema({
 const Fruit = mongoose.model("Fruit", fruitSchema);
 
 // Create a single document
-const fruit = new Fruit({
+const apple = new Fruit({
     name: "Apple",
     rating: 7,
     review: "Pretty solid as a fruit."
 });
 
 // Save it to the collection
-fruit.save();
+apple.save();
 
 // Create and same several documents
 const kiwi = new Fruit({
@@ -54,6 +54,24 @@ const banana = new Fruit({
     rating: 3,
     review: "Weird texture"
 });
+
+// Create schema of a collection element 'Person'
+const personSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    favouriteFruit: fruitSchema
+});
+
+// Create a collection "people"
+const Person = mongoose.model("Person", personSchema);
+
+const person = new Person({
+    name: "Amy",
+    age: 12,
+    favouriteFruit: kiwi
+});
+
+person.save();
 
 Fruit.insertMany([kiwi, orange, banana], function(err, result) {
     if(err) {
@@ -92,3 +110,14 @@ Fruit.insertMany([kiwi, orange, banana], function(err, result) {
         });
     }
 });
+
+/* Finally:
+> db.fruits.find()
+{ "_id" : ObjectId("6141c200669fdf3e712621aa"), "name" : "Kiwi", "rating" : 10, "review" : "The best fruit!", "__v" : 0 }
+{ "_id" : ObjectId("6141c200669fdf3e712621ac"), "name" : "Banana", "rating" : 3, "review" : "Weird texture", "__v" : 0 }
+> db.people.find()
+{ "_id" : ObjectId("6141c200669fdf3e712621ad"), "name" : "Amy", "age" : 12, "favouriteFruit" : { 
+    "name" : "Kiwi", "rating" : 10, "review" : "The best fruit!", "_id" : ObjectId("6141c200669fdf3e712621aa") 
+}, "__v" : 0 }
+
+*/
