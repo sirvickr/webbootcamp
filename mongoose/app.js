@@ -76,7 +76,17 @@ Fruit.insertMany([kiwi, orange, banana], function(err, result) {
                 } else {
                     console.log(result);
                 }
-                mongoose.connection.close();
+
+                Fruit.deleteMany({ rating: 7 }, function(err, result) {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log("Successfully deleted the documents:");
+                        console.log(result);
+                    }
+
+                    mongoose.connection.close();
+                });
             });
     
         });
