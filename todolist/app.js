@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -11,14 +12,32 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const items = ["Buy Food", "Cook Food", "Eat Food"];
 const workItems = [];
+
+// Connection URL
+const url = "mongodb://localhost:27017/";
+
+// Database name
+const dbName = "fruitsDB";
+
+// Connect to the database (it is created if necessary)
+mongoose.connect(url + dbName, { useNewUrlParser: true });
+
+// Create schema of 'Item'
+const itemSchema = new mongoose.Schema({
+  name: String
+});
+
+// Create a collection "items"
+const Item = mongoose.model("Item", itemSchema);
 
 app.get("/", function(req, res) {
 
 const day = date.getDate();
 
-  res.render("list", {listTitle: day, newListItems: items});
+  Item.find({}, function(err, items) {
+    res.render("list", {listTitle: day, newListItems: items});
+  });
 
 });
 
@@ -30,12 +49,12 @@ app.post("/", function(req, res){
     workItems.push(item);
     res.redirect("/work");
   } else {
-    items.push(item);
+    new Item({ name: item }).save();
     res.redirect("/");
   }
 });
 
-app.get("/work", function(req,res){
+app.get("/work", function(req, res){
   res.render("list", {listTitle: "Work List", newListItems: workItems});
 });
 
