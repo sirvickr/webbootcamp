@@ -18,7 +18,7 @@ const workItems = [];
 const url = "mongodb://localhost:27017/";
 
 // Database name
-const dbName = "fruitsDB";
+const dbName = "todolist";
 
 // Connect to the database (it is created if necessary)
 mongoose.connect(url + dbName, { useNewUrlParser: true });
