@@ -54,4 +54,5 @@ Fruit.insertMany([kiwi, orange, banana], function(err) {
     } else {
         console.log("Successfully saved all the fruits to the database");
     }
+    mongoose.connection.close();
 });
