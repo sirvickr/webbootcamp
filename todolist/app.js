@@ -25,7 +25,8 @@ mongoose.connect(url + dbName, { useNewUrlParser: true });
 
 // Create schema of 'Item'
 const itemSchema = new mongoose.Schema({
-  name: String
+  name: String,
+  done: Boolean
 });
 
 // Create a collection "items"
@@ -49,9 +50,22 @@ app.post("/", function(req, res){
     workItems.push(item);
     res.redirect("/work");
   } else {
-    new Item({ name: item }).save();
+    new Item({ name: item, done: false }).save();
     res.redirect("/");
   }
+
+});
+
+app.post("/toggle", function(req, res){
+  let checked = req.body.done ? true : false;
+  Item.updateOne({_id: req.body.itemId}, {done: checked}, function(err, result) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("updated:", result);
+    }
+  });
+  res.redirect("/");
 });
 
 app.get("/work", function(req, res){

@@ -6,16 +6,23 @@
 
   <div class="box">
     <% newListItems.forEach(function(item) { %>
-      <div class="item">
-        <input type="checkbox">
-        <p><%=  item.name  %></p>
-      </div>
-      <% }); %>
+      <form action="/toggle" method="post">
+        <div class="item">
+          <input type="hidden" name="itemId" value="<%=item._id%>">
+          <input type="checkbox" name="done" onChange="this.form.submit()"
+            <% if (item.done) { %>
+              checked
+            <% } %>
+          >
+          <p><%=  item.name  %></p>
+        </div>
+        </form>
+    <% }); %>
 
-      <form class="item" action="/" method="post">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
-        <button type="submit" name="list">+</button>
-      </form>
+    <form class="item" action="/" method="post">
+      <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+      <button type="submit" name="list">+</button>
+    </form>
   </div>
 
 <%- include("footer") -%>
