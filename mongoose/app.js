@@ -11,8 +11,15 @@ mongoose.connect(url + dbName, { useNewUrlParser: true });
 
 // Create schema of a collection element
 const fruitSchema = new mongoose.Schema({
-    name: String,
-    rating: Number,
+    name: {
+        type: String,
+        required: [true, "Fruit requires a name"]
+    },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 10
+    },
     review: String
 });
 
@@ -48,11 +55,12 @@ const banana = new Fruit({
     review: "Weird texture"
 });
 
-Fruit.insertMany([kiwi, orange, banana], function(err) {
+Fruit.insertMany([kiwi, orange, banana], function(err, result) {
     if(err) {
         console.log(err);
     } else {
-        console.log("Successfully saved all the fruits to the database");
+        console.log("Successfully saved all the fruits to the database:");
+        console.log(result);
 
         Fruit.find(function(err, result) {
             if(err) {
