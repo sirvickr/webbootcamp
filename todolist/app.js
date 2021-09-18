@@ -16,7 +16,9 @@ app.use(express.static("public"));
 const workItems = [];
 
 // Connection URL
-const url = "mongodb://localhost:27017/";
+//const url = "mongodb+srv://admin:<password>@vickr.fsdbp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const url = "mongodb+srv://admin:p25vZubG@vickr.fsdbp.mongodb.net/";
+//const url = "mongodb://localhost:27017/";
 
 // Database name
 const dbName = "todolist";
