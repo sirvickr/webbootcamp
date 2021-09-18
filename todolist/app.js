@@ -23,6 +23,7 @@ const dbName = "todolist";
 
 // Connect to the database (it is created if necessary)
 mongoose.connect(url + dbName, { useNewUrlParser: true });
+console.log("connected to", url)
 
 // Create schema of 'Item'
 const itemSchema = new mongoose.Schema({
@@ -45,7 +46,11 @@ const List = mongoose.model("List", listSchema);
 app.get("/", function(req, res) {
   const day = date.getDate();
   Item.find({}, function(err, items) {
-    res.render("list", {today: day, listTitle: "Main", newListItems: items});
+    if(err) {
+      console.log("get '/' error", err);
+    } else {
+      res.render("list", {today: day, listTitle: "Main", newListItems: items});
+    }
   });
 });
 
@@ -117,14 +122,18 @@ app.post("/delete", function(req, res) {
 app.get("/:list", function(req, res) {
   const listName = _.capitalize(req.params.list);
   const day = date.getDate();
-  console.log(listName);
+  console.log("get:", listName);
   List.findOne({name: listName}, function(err, list) {
-    if(list) {
-      res.render("list", {today: day, listTitle: listName, newListItems: list.items});
+    if(err) {
+      console.log("get /" + listName + "/ error", err);
     } else {
-      list = new List({ name: listName, items: [] });
-      list.save();
-      res.redirect("/" + listName);
+      if(list) {
+        res.render("list", {today: day, listTitle: listName, newListItems: list.items});
+      } else {
+        list = new List({ name: listName, items: [] });
+        list.save();
+        res.redirect("/" + listName);
+      }
     }
   });
 });
